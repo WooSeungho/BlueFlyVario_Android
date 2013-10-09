@@ -115,6 +115,33 @@ public class HardwareListActivity extends Activity {
     }
 
 
+    
+    //G_Variometer v7.8 patch
+    //I connot get current HW setting vlaues of BlueFlyVario. I got null in initial time.
+    //So, I used file saving & reading
+    //Variables should be changed own varialbes.
+    private void userSettingSave() {
+        String BFVHWSetfilepath= MotherActivity.SD_PATH+"/G_Variometer/BFV_HW_Set.set";//v7.8 BlueFlyVario HWSetting Set
+      		FileWriter BFVHWSetbfw;
+      		try {
+      			BFVHWSetbfw = new FileWriter(BFVHWSetfilepath,false);
+      			BFVHWSetbfw.write(MotherActivity.useAudioWhenConnected+"|"+MotherActivity.useAudioWhenDisconnected+"|"
+      					+MotherActivity.positionNoise+"|"
+      					+MotherActivity.liftThreshold+"|"+MotherActivity.liftOffThreshold+"|"
+      					+MotherActivity.liftFreqBase+"|"+MotherActivity.liftFreqIncrement+"|"
+      					+MotherActivity.sinkThreshold+"|"+MotherActivity.sinkOffThreshold+"|"
+      					+MotherActivity.sinkFreqBase+"|"+MotherActivity.sinkFreqIncrement+"|"
+      					+MotherActivity.secondsBluetoothWait+"|"+MotherActivity.rateMultiplier+"|"
+      					+MotherActivity.volume);//+"|"+BFVAbsoluteOffset);
+      			BFVHWSetbfw.flush();
+      			BFVHWSetbfw.close();
+      		} catch (IOException eF) {
+      			eF.printStackTrace();
+      		}//false는 파일 새로 만들기
+    }
+    
+    
+
     private boolean setParameterValue(String name, String value) {
         //  Log.i("BFV", "setParam" + name + value);
         if (hardwareParameters != null) {
@@ -143,7 +170,44 @@ public class HardwareListActivity extends Activity {
         hardwareParameterArrayAdapter.clear();
         for (int i = 0; i < parameters.size(); i++) {
             HardwareParameter parameter = parameters.get(i);
-            hardwareParameterArrayAdapter.add(parameter.getName() + "\n   " + parameter.getValue());
+            //hardwareParameterArrayAdapter.add(parameter.getName() + "\n   " + parameter.getValue());
+                        //v7.8 woo code HW setting을 읽어 오지 못하는 문제로 usersetting을 사용하여 보여주기만 하기.
+            String pname=parameter.getName();
+            if(parameter.getValue()==null) {
+            	
+	            if(pname.equals(MotherActivity.Title_useAudioWhenConnected)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.useAudioWhenConnected);
+	            } else if(pname.equals(MotherActivity.Title_useAudioWhenDisconnected)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.useAudioWhenDisconnected);
+	            } else if(pname.equals(MotherActivity.Title_positionNoise)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.positionNoise);
+	            } else if(pname.equals(MotherActivity.Title_liftThreshold)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.liftThreshold);
+	            } else if(pname.equals(MotherActivity.Title_liftOffThreshold)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.liftOffThreshold);
+	            } else if(pname.equals(MotherActivity.Title_liftFreqBase)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.liftFreqBase);
+	            } else if(pname.equals(MotherActivity.Title_liftFreqIncrement)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.liftFreqIncrement);
+	            } else if(pname.equals(MotherActivity.Title_sinkThreshold)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.sinkThreshold);
+	            } else if(pname.equals(MotherActivity.Title_sinkOffThreshold)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.sinkOffThreshold);
+	            } else if(pname.equals(MotherActivity.Title_sinkFreqBase)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.sinkFreqBase);
+	            } else if(pname.equals(MotherActivity.Title_sinkFreqIncrement)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.sinkFreqIncrement);
+	            } else if(pname.equals(MotherActivity.Title_secondsBluetoothWait)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.secondsBluetoothWait);
+	            } else if(pname.equals(MotherActivity.Title_rateMultiplier)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.rateMultiplier);
+	            } else if(pname.equals(MotherActivity.Title_volume)) {
+	            	hardwareParameterArrayAdapter.add(pname + "\n   " + MotherActivity.volume);
+	            }
+
+            } else {
+            	hardwareParameterArrayAdapter.add(parameter.getName() + "\n   " + parameter.getValue());//parameter.getValue()값이 첨에 null이 들어오는 이유는?
+            }
         }
     }
 
@@ -167,7 +231,42 @@ public class HardwareListActivity extends Activity {
 
                 inputDouble.setKeyListener(new DigitsKeyListener(true, true));
                 final String nameDouble = parameter.getName();
-                inputDouble.setText(parameter.getValue());
+                // inputDouble.setText(parameter.getValue());
+                                if(parameter.getValue()==null) {
+                	
+    	            if(nameDouble.equals(MotherActivity.Title_useAudioWhenConnected)) {
+    	            	inputDouble.setText(MotherActivity.useAudioWhenConnected);
+    	            } else if(nameDouble.equals(MotherActivity.Title_useAudioWhenDisconnected)) {
+    	            	inputDouble.setText(MotherActivity.useAudioWhenDisconnected);
+    	            } else if(nameDouble.equals(MotherActivity.Title_positionNoise)) {
+    	            	inputDouble.setText(MotherActivity.positionNoise);
+    	            } else if(nameDouble.equals(MotherActivity.Title_liftThreshold)) {
+    	            	inputDouble.setText(MotherActivity.liftThreshold);
+    	            } else if(nameDouble.equals(MotherActivity.Title_liftOffThreshold)) {
+    	            	inputDouble.setText(MotherActivity.liftOffThreshold);
+    	            } else if(nameDouble.equals(MotherActivity.Title_liftFreqBase)) {
+    	            	inputDouble.setText(MotherActivity.liftFreqBase);
+    	            } else if(nameDouble.equals(MotherActivity.Title_liftFreqIncrement)) {
+    	            	inputDouble.setText(MotherActivity.liftFreqIncrement);
+    	            } else if(nameDouble.equals(MotherActivity.Title_sinkThreshold)) {
+    	            	inputDouble.setText(MotherActivity.sinkThreshold);
+    	            } else if(nameDouble.equals(MotherActivity.Title_sinkOffThreshold)) {
+    	            	inputDouble.setText(MotherActivity.sinkOffThreshold);
+    	            } else if(nameDouble.equals(MotherActivity.Title_sinkFreqBase)) {
+    	            	inputDouble.setText(MotherActivity.sinkFreqBase);
+    	            } else if(nameDouble.equals(MotherActivity.Title_sinkFreqIncrement)) {
+    	            	inputDouble.setText(MotherActivity.sinkFreqIncrement);
+    	            } else if(nameDouble.equals(MotherActivity.Title_secondsBluetoothWait)) {
+    	            	inputDouble.setText(MotherActivity.secondsBluetoothWait);
+    	            } else if(nameDouble.equals(MotherActivity.Title_rateMultiplier)) {
+    	            	inputDouble.setText(MotherActivity.rateMultiplier);
+    	            } else if(nameDouble.equals(MotherActivity.Title_volume)) {
+    	            	inputDouble.setText(MotherActivity.volume);
+    	            }
+
+                } else {
+                    inputDouble.setText(parameter.getValue());
+                }
 
 
                 new AlertDialog.Builder(this)
@@ -193,7 +292,42 @@ public class HardwareListActivity extends Activity {
                 inputInt.setSingleLine();
                 inputInt.setKeyListener(new DigitsKeyListener(false, false));
                 final String nameInt = parameter.getName();
-                inputInt.setText(parameter.getValue());
+                // inputInt.setText(parameter.getValue());.
+                if(parameter.getValue()==null) {
+                	
+    	            if(nameInt.equals(MotherActivity.Title_useAudioWhenConnected)) {
+    	            	inputInt.setText(MotherActivity.useAudioWhenConnected);
+    	            } else if(nameInt.equals(MotherActivity.Title_useAudioWhenDisconnected)) {
+    	            	inputInt.setText(MotherActivity.useAudioWhenDisconnected);
+    	            } else if(nameInt.equals(MotherActivity.Title_positionNoise)) {
+    	            	inputInt.setText(MotherActivity.positionNoise);
+    	            } else if(nameInt.equals(MotherActivity.Title_liftThreshold)) {
+    	            	inputInt.setText(MotherActivity.liftThreshold);
+    	            } else if(nameInt.equals(MotherActivity.Title_liftOffThreshold)) {
+    	            	inputInt.setText(MotherActivity.liftOffThreshold);
+    	            } else if(nameInt.equals(MotherActivity.Title_liftFreqBase)) {
+    	            	inputInt.setText(MotherActivity.liftFreqBase);
+    	            } else if(nameInt.equals(MotherActivity.Title_liftFreqIncrement)) {
+    	            	inputInt.setText(MotherActivity.liftFreqIncrement);
+    	            } else if(nameInt.equals(MotherActivity.Title_sinkThreshold)) {
+    	            	inputInt.setText(MotherActivity.sinkThreshold);
+    	            } else if(nameInt.equals(MotherActivity.Title_sinkOffThreshold)) {
+    	            	inputInt.setText(MotherActivity.sinkOffThreshold);
+    	            } else if(nameInt.equals(MotherActivity.Title_sinkFreqBase)) {
+    	            	inputInt.setText(MotherActivity.sinkFreqBase);
+    	            } else if(nameInt.equals(MotherActivity.Title_sinkFreqIncrement)) {
+    	            	inputInt.setText(MotherActivity.sinkFreqIncrement);
+    	            } else if(nameInt.equals(MotherActivity.Title_secondsBluetoothWait)) {
+    	            	inputInt.setText(MotherActivity.secondsBluetoothWait);
+    	            } else if(nameInt.equals(MotherActivity.Title_rateMultiplier)) {
+    	            	inputInt.setText(MotherActivity.rateMultiplier);
+    	            } else if(nameInt.equals(MotherActivity.Title_volume)) {
+    	            	inputInt.setText(MotherActivity.volume);
+    	            }
+
+                } else {
+                    inputInt.setText(parameter.getValue());
+                }
 
                 new AlertDialog.Builder(this)
                         .setTitle("Edit Integer Parameter")
@@ -221,6 +355,15 @@ public class HardwareListActivity extends Activity {
                 final String nameBoolean = parameter.getName();
                 boolean val = parameter.getBooleanValue();
 
+                if(parameter.getValue()==null) {
+                	
+    	            if(nameBoolean.equals(MotherActivity.Title_useAudioWhenConnected)) {
+    	            	val=Boolean.parseBoolean(MotherActivity.useAudioWhenConnected);
+    	            } else if(nameBoolean.equals(MotherActivity.Title_useAudioWhenDisconnected)) {
+    	            	val=Boolean.parseBoolean(MotherActivity.useAudioWhenDisconnected);
+    	            }
+
+                }
                 check.setChecked(val);
 
                 new AlertDialog.Builder(this)
